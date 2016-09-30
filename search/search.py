@@ -87,9 +87,22 @@ def depthFirstSearch(problem):
 	 			dfsStack.push((coord, actions + [directions], visited + [node] ))
 	return []
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+	bfsQueue = util.Queue()
+	print "Start:", problem.getStartState()
+	print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+	print "Start's successors:", problem.getSuccessors(problem.getStartState())
+	bfsQueue.push((problem.getStartState(),[]))
+	marked = []
+	while not bfsQueue.isEmpty():
+		node, actions = bfsQueue.pop()
+		for coord, directions, steps in problem.getSuccessors(node):
+			if not coord in marked :
+				if problem.isGoalState(coord):
+					return actions+[directions]
+				bfsQueue.push((coord,actions+[directions]))
+				marked.append(coord)
+	return []
+   
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
