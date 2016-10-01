@@ -134,9 +134,25 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 				score = problem.getCostOfActions(new_actions) + heuristic(coord,problem)
 				fringe.push( (coord, new_actions), score)
 	return []
-
+def GreedyBestFirstSearch(problem, heuristic=nullHeuristic):
+	visited = []
+	fringe = util.PriorityQueue()
+	start = problem.getStartState()
+	fringe.push( (start, []), heuristic(start, problem))
+	while not fringe.isEmpty():
+		node, actions = fringe.pop()
+		if problem.isGoalState(node):
+			return actions
+		visited.append(node)
+		for coord, directions, cost in problem.getSuccessors(node):
+			if not coord in visited:
+				new_actions = actions + [directions]
+				score = heuristic(coord,problem)
+				fringe.push( (coord, new_actions), score)
+	return []
 
 # Abbreviations
+gbfs = GreedyBestFirstSearch
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
