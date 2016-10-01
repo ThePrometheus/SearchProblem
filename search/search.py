@@ -18,6 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+from util import manhattanDistance
 
 class SearchProblem:
     """
@@ -114,12 +115,25 @@ def nullHeuristic(state, problem=None):
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
-    return 0
+    return manhattanDistance(state,problem)
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+	#memory= 40
+	visited = []
+	fringe = util.PriorityQueue()
+	start = problem.getStartState()
+	fringe.push( (start, []), heuristic(start, problem))
+	while not fringe.isEmpty():
+		node, actions = fringe.pop()
+		if problem.isGoalState(node):
+			return actions
+		visited.append(node)
+		for coord, directions, cost in problem.getSuccessors(node):
+			if not coord in visited:
+				new_actions = actions + [directions]
+				score = problem.getCostOfActions(new_actions) + heuristic(coord,problem)
+				fringe.push( (coord, new_actions), score)
+	return []
 
 
 # Abbreviations
